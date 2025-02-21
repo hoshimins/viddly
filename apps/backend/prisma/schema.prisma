@@ -1,0 +1,126 @@
+generator client {
+  provider = "prisma-client-js"
+  output = "../../../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model users {
+  id           String   @id @default(cuid())
+  name         String?  @default("unknown")
+  passwordHash String   @map("password_hash")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  videos   videos[]
+  comments comments[]
+  likes    likes[]
+
+  @@map("users")
+}
+
+model videos {
+  id          String   @id @default(cuid())
+  title       String   @db.VarChar(255)
+  description String   @db.VarChar(500)
+  url         String
+  uploader    String
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  user users @relation(fields: [uploader], references: [id])
+
+  thumbnail            thumbnails?     @relation(fields: [thumbnailId], references: [id])
+  thumbnailId          String?         @unique
+  comments             comments[]
+  likes                likes[]
+  relatedVideos        relatedVideos[] @relation("VideoHasRelated")
+  inverseRelatedVideos relatedVideos[] @relation("RelatedBelongsToVideo")
+  videoTags            videoTags[]
+
+  @@map("videos")
+}
+
+model thumbnails {
+  id        String   @id @default(cuid())
+  url       String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  videoId String  @unique // 1対1の関係を保証するための一意制約
+  videos  videos?
+
+  @@map("thumbnails")
+}
+
+model comments {
+  id        String   @id @default(cuid())
+  text      String   @db.VarChar(500)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  videos videos @relation(fields: [videoId], references: [id])
+  users  users  @relation(fields: [userId], references: [id])
+
+  videoId String
+  userId  String
+
+  @@map("comments")
+}
+
+model likes {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  videos videos @relation(fields: [videoId], references: [id])
+  users  users  @relation(fields: [userId], references: [id])
+
+  videoId String
+  userId  String
+
+  @@unique([videoId, userId])
+  @@map("likes")
+}
+
+model tags {
+  id        String   @id @default(cuid())
+  name      String   @db.VarChar(100)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  videoTags videoTags[]
+
+  @@map("tags")
+}
+
+model videoTags {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  video videos @relation(fields: [videoId], references: [id])
+  tag   tags   @relation(fields: [tagId], references: [id])
+
+  videoId String
+  tagId   String
+
+  @@map("video_tags")
+}
+
+model relatedVideos {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  videos  videos @relation("RelatedBelongsToVideo", fields: [videoId], references: [id])
+  related videos @relation("VideoHasRelated", fields: [relatedId], references: [id])
+
+  videoId   String
+  relatedId String
+
+  @@map("related_videos")
+}

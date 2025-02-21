@@ -1,0 +1,22 @@
+{
+  "private": true,
+  "packageManager": "bun@1.0.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "paths": {
+    "shared": "packages/shared"
+  },
+  "scripts": {
+    "dev:backend": "bun run --cwd apps/backend  dev",
+    "dev:frontend": "bun run --cwd apps/frontend dev",
+    "dev": "bun run dev:backend & bun run dev:frontend",
+    "build": "bun run --cwd apps/frontend build"
+  },
+  "devDependencies": {},
+  "dependencies": {
+    "@prisma/client": "6.3.1",
+    "prisma": "^6.3.1"
+  }
+}
