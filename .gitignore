@@ -12,3 +12,4 @@ apps/frontend/public/*
 
 ## Ignore Backend
 apps/backend/.env
+apps/backend/node_modules

@@ -1,3 +1,4 @@
+import { UploadVideoMetaData } from "../../../../../packages/types/video";
 import prisma from './../../db';
 
 export const videoService = {
@@ -28,7 +29,7 @@ export const videoService = {
     return videosAndThumbnails;
   },
 
-  async getVideoDetail(id: string) {
+  async getVideoDetail(id: number) {
     // prisma によるデータベースアクセス
     const videoDetail = await prisma.videos.findUnique({
       where: {
@@ -52,16 +53,47 @@ export const videoService = {
     return videoDetail;
   },
 
-  async register(username: string, password: string) {
+  async upload(data: UploadVideoMetaData) {
+    try {
+      const videoUrl = "";
 
-    // const newUser = await prisma.users.create({
-    //   data: {
-    //     username,
-    //     password,
-    //   },
-    // });
 
-    return { user: "" };
+      const uploader = 1;
+      if (!uploader) {
+        throw new Error("Uploader not found");
+      }
+
+      // 動画情報を登録
+      const newVideo = await prisma.videos.create({
+        data: {
+          title: data.title,
+          description: data.description,
+          url: videoUrl,
+          uploader: uploader,
+        },
+      });
+
+      // サムネイルを登録
+      if (data.thumbnailData) {
+      const thumbnailUrl = `${data.actors}/${data.thumbnailData}`;
+
+        const newThumbnail = await prisma.thumbnails.create({
+          data: {
+            url: thumbnailUrl,
+            video: {
+              connect: {
+                id: newVideo.id,
+              },
+            }
+          },
+        });
+      }
+
+    } catch (error) {
+      console.error('Error in videoService.upload:', error);
+      return { error: 'Internal server error' };
+    }
+
+    return { message: 'Video uploaded successfully' };
   },
-
 };

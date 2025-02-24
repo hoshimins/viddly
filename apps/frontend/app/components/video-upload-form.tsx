@@ -3,33 +3,57 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
+import { videoUpload } from "@/lib/video-upload"
 import { useEffect, useState } from 'react'
 
 export function VideoUploadForm() {
   const [mounted, setMounted] = useState(false)
-  const [file, setFile] = useState<File | null>(null)
+  const [videoFile, setVideoFile] = useState<File | null>(null)
+  const [thumbnailFile, setThumbnailFile] = useState<File | null>(null)
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [actors, setActors] = useState('')
-  const [category, setCategory] = useState('')
+  // const [category, setCategory] = useState('')
 
   useEffect(() => {
     setMounted(true)
   }, [])
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleVideFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
-      setFile(event.target.files[0])
+      setVideoFile(event.target.files[0])
     }
   }
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    // ここで動画アップロードの処理を行う
-    console.log('動画をアップロード:', { file, title, description, actors, category })
+  const handleThumbnailFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      setThumbnailFile(event.target.files[0])
+    }
   }
+
+  const handleSubmit = async(event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    // Validate input fields before uploading
+    if (!videoFile) {
+      alert('動画ファイルを選択してください')
+      return
+    }
+    if (!title) {
+      alert('タイトルを入力してください')
+      return
+    }
+    if (!description) {
+      alert('説明文を入力してください')
+      return
+    }
+    if (!actors) {
+      alert('出演者名を入力してください')
+      return
+    }
+
+    await videoUpload({ videoFile, title, description, actors, thumbnailFile });
+  };
 
   if (!mounted) {
     return null // or a loading placeholder
@@ -42,8 +66,8 @@ export function VideoUploadForm() {
         <Input
           id="video-file"
           type="file"
-          accept="video/*"
-          onChange={handleFileChange}
+          accept="video/mp4"
+          onChange={handleVideFileChange}
           className="mt-1"
         />
       </div>
@@ -69,7 +93,7 @@ export function VideoUploadForm() {
         />
       </div>
       <div>
-        <Label htmlFor="video-actors">出演者</Label>
+        <Label htmlFor="video-actors">出ている人</Label>
         <Input
           id="video-actors"
           type="text"
@@ -80,7 +104,17 @@ export function VideoUploadForm() {
         />
       </div>
       <div>
-        <Label htmlFor="video-category">カテゴリー</Label>
+        <Label htmlFor="video-file">サムネイル</Label>
+        <Input
+          id="thumbnail-file"
+          type="file"
+          accept="image/*"
+          onChange={handleThumbnailFileChange}
+          className="mt-1"
+        />
+      </div>
+      {/* <div>
+        <Label htmlFor="video-category">タグ</Label>
         <Select value={category} onValueChange={setCategory}>
           <SelectTrigger className="w-full">
             <SelectValue placeholder="カテゴリーを選択" />
@@ -93,7 +127,7 @@ export function VideoUploadForm() {
             <SelectItem value="other">その他</SelectItem>
           </SelectContent>
         </Select>
-      </div>
+      </div> */}
       <Button type="submit" className="w-full">動画を登録</Button>
     </form>
   )

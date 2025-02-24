@@ -14,7 +14,8 @@ videos.get('/:id', async (c) => {
 
 
 videos.post('/upload', async (c) => {
-    return c.json({ video: { id: 1, videoname: 'videoname' } });
+    const response = await videoController.upload(c);
+    return response;
 });
 
 

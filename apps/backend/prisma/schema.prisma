@@ -1,6 +1,7 @@
+
 generator client {
   provider = "prisma-client-js"
-  output = "../../../node_modules/.prisma/client"
+  output   = "../../../node_modules/.prisma/client"
 }
 
 datasource db {
@@ -9,88 +10,97 @@ datasource db {
 }
 
 model users {
-  id           String   @id @default(cuid())
-  name         String?  @default("unknown")
-  passwordHash String   @map("password_hash")
-  createdAt    DateTime @default(now()) @map("created_at")
-  updatedAt    DateTime @updatedAt @map("updated_at")
+  id           Int        @id @default(autoincrement())
 
-  videos   videos[]
-  comments comments[]
-  likes    likes[]
+  name         String?    @default("unknown")
+  passwordHash String     @map("password_hash")
+
+  createdAt    DateTime   @default(now()) @map("created_at")
+  updatedAt    DateTime   @updatedAt @map("updated_at")
+
+  comments     comments[]
+  likes        likes[]
+  videos       videos[]
 
   @@map("users")
 }
 
 model videos {
-  id          String   @id @default(cuid())
-  title       String   @db.VarChar(255)
-  description String   @db.VarChar(500)
-  url         String
-  uploader    String
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
+  id                   Int             @id @default(autoincrement())
 
-  user users @relation(fields: [uploader], references: [id])
+  title                String          @db.VarChar(255)
+  description          String          @db.VarChar(500)
+  url                  String
 
-  thumbnail            thumbnails?     @relation(fields: [thumbnailId], references: [id])
-  thumbnailId          String?         @unique
+  createdAt            DateTime        @default(now()) @map("created_at")
+  updatedAt            DateTime        @updatedAt @map("updated_at")
+
+  thumbnailId          Int?
+  uploader             Int
+
   comments             comments[]
   likes                likes[]
-  relatedVideos        relatedVideos[] @relation("VideoHasRelated")
-  inverseRelatedVideos relatedVideos[] @relation("RelatedBelongsToVideo")
   videoTags            videoTags[]
+
+  // relatedVideos        relatedVideos[] @relation("VideoHasRelated")
+  // inverseRelatedVideos relatedVideos[] @relation("RelatedBelongsToVideo")
+
+  thumbnail            thumbnails?     @relation(fields: [thumbnailId], references: [id])
+  user                 users?          @relation(fields: [uploader], references: [id])
 
   @@map("videos")
 }
 
 model thumbnails {
-  id        String   @id @default(cuid())
+  id        Int      @id @default(autoincrement())
   url       String
+
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  videoId String  @unique // 1対1の関係を保証するための一意制約
-  videos  videos?
+  video     videos[]
 
   @@map("thumbnails")
 }
 
 model comments {
-  id        String   @id @default(cuid())
+  id        Int      @id @default(autoincrement())
+  videoId   Int
+  userId    Int
+
   text      String   @db.VarChar(500)
+
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  videos videos @relation(fields: [videoId], references: [id])
-  users  users  @relation(fields: [userId], references: [id])
-
-  videoId String
-  userId  String
+  users     users    @relation(fields: [userId], references: [id])
+  videos    videos   @relation(fields: [videoId], references: [id])
 
   @@map("comments")
 }
 
 model likes {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now()) @map("created_at")
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  videoId   Int
+
   updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at")
 
-  videos videos @relation(fields: [videoId], references: [id])
-  users  users  @relation(fields: [userId], references: [id])
-
-  videoId String
-  userId  String
+  users     users    @relation(fields: [userId], references: [id])
+  videos    videos   @relation(fields: [videoId], references: [id])
 
   @@unique([videoId, userId])
   @@map("likes")
 }
 
 model tags {
-  id        String   @id @default(cuid())
-  name      String   @db.VarChar(100)
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  id        Int         @id @default(autoincrement())
+
+  name      String      @db.VarChar(100)
+
+  createdAt DateTime    @default(now()) @map("created_at")
+  updatedAt DateTime    @updatedAt @map("updated_at")
 
   videoTags videoTags[]
 
@@ -98,29 +108,29 @@ model tags {
 }
 
 model videoTags {
-  id        String   @id @default(cuid())
+  id        Int      @id @default(autoincrement())
+  tagId     Int
+  videoId   Int
+
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  video videos @relation(fields: [videoId], references: [id])
-  tag   tags   @relation(fields: [tagId], references: [id])
-
-  videoId String
-  tagId   String
+  tag       tags     @relation(fields: [tagId], references: [id])
+  video     videos   @relation(fields: [videoId], references: [id])
 
   @@map("video_tags")
 }
 
-model relatedVideos {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+// model relatedVideos {
+//   id        Int      @id @default(autoincrement())
+//   relatedId Int
+//   videoId   Int
 
-  videos  videos @relation("RelatedBelongsToVideo", fields: [videoId], references: [id])
-  related videos @relation("VideoHasRelated", fields: [relatedId], references: [id])
+//   createdAt DateTime @default(now()) @map("created_at")
+//   updatedAt DateTime @updatedAt @map("updated_at")
 
-  videoId   String
-  relatedId String
+//   related   videos   @relation("VideoHasRelated", fields: [relatedId], references: [id])
+//   videos    videos   @relation("RelatedBelongsToVideo", fields: [videoId], references: [id])
 
-  @@map("related_videos")
-}
+//   @@map("related_videos")
+// }

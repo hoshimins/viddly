@@ -1,4 +1,5 @@
 import type { Context } from 'hono';
+import { UploadVideoMetaData } from "../../../../../packages/types/video";
 import { videoService } from '../services/videoServices';
 
 export const videoController = {
@@ -19,7 +20,7 @@ export const videoController = {
   // ビデオ詳細取得
   async getVideoDetail(c: Context) {
     try {
-      const  id  = c.req.param('id');
+      const  id  = Number(c.req.param('id'));
       const video = await videoService.getVideoDetail(id);
 
       return c.json(video);
@@ -29,31 +30,24 @@ export const videoController = {
     }
   },
 
-  // ユーザー登録
-  async register(c: Context) {
-    // try {
-    //   // リクエストボディからデータを取得
-    //   const { username, password } = await c.req.json();
+  // ビデオアップロード
+  async upload(c: Context) {
+    try {
+      const body = await c.req.parseBody();
+      const data: UploadVideoMetaData = {
+        title: typeof body.title === "string" ? body.title : "",
+        description: typeof body.description === "string" ? body.description : "",
+        actors: typeof body.actors === "string" ? body.actors :"",
+        thumbnailData: typeof body.thumbnail === "string" ? body.thumbnail : "",
+      };
 
-    //   // 必須項目が存在するか確認
-    //   if (!username || !password) {
-    //     return c.json({ error: 'Username and password are required' }, 400);
-    //   }
+      const response = await videoService.upload(data);
 
-    //   // サービス層でユーザー登録を実行
-    //   const result = await userService.register(username, password);
-
-    //   // エラーが返された場合
-    //   if (result.error) {
-    //     return c.json({ error: result.error }, 400);
-    //   }
-
-    //   // 成功レスポンスを返す
-    //   return c.json({ message: 'User registered successfully', user: result.user });
-    // } catch (error) {
-    //   console.error('Error in userController.register:', error);
-    //   return c.json({ error: 'Internal server error' }, 500);
-    // }
+      return c.json(response);
+    } catch (error) {
+      console.error('Error in videoController.upload:', error);
+      return c.json({ error: 'Internal server error' }, 500);
+    }
   },
 
 };
