@@ -1,0 +1,15 @@
+{
+  "name": "@viddly/backend",
+  "private": true,
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "hono": "^3.3.0"
+  },
+  "devDependencies": {
+    "tsx": "^3.12.7",
+    "typescript": "^5.2.2"
+  }
+}

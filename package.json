@@ -1,0 +1,16 @@
+{
+  "name": "viddly",
+  "private": true,
+  "workspaces": [
+    "apps/frontend",
+    "apps/backend",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:frontend": "bun run --cwd apps/frontend dev",
+    "dev:backend": "bun run --cwd apps/backend dev",
+    "dev": "bun run dev:frontend & bun run dev:backend",
+    "build:frontend": "bun run --cwd apps/frontend build",
+    "build:backend": "bun run --cwd apps/backend build"
+  }
+}
