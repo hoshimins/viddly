@@ -2,7 +2,7 @@ import { serve } from 'bun';
 import app from './app/routes/index';
 
 serve({
-  port: 3000,
+  port: 3001,
   async fetch(req) {
     console.log("Incoming request method:", req.method);
 

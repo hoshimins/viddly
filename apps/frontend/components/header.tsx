@@ -34,6 +34,8 @@ export function Header() {
             placeholder="動画を検索..."
             className="mr-2"
           />
+          <div className="flex flex-wrap items-center gap-2 md:flex-row">
+          </div>
           <Button size="icon">
             <Search className="h-4 w-4" />
           </Button>

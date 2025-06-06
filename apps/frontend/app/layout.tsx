@@ -1,11 +1,9 @@
-import './styles/globals.css';
-
+import '@/styles/globals.css'
 
 export const metadata = {
   title: 'Viddly',
   description: 'A video streaming platform',
 }
-
 
 export default function RootLayout({
   children,
@@ -13,10 +11,10 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="ja">
-      <body>
+    <html lang="ja" suppressHydrationWarning>
+      <body className="min-h-screen bg-background font-sans antialiased">
         {children}
       </body>
-    </html >
+    </html>
   )
 }

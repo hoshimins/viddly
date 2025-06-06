@@ -23,7 +23,7 @@ export default function Home() {
         if (!response.ok) {
           throw new Error(`Failed to fetch video data: ${response.status}`)
         }
-        const data: VideoData[] = await response.json() // Updated to VideoData[]
+        const data: VideoData[] = await response.json()
         setVideoData(data)
       } catch (error) {
         console.error('Failed to fetch video data:', error)

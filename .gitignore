@@ -9,6 +9,7 @@ apps/frontend/.vercel
 apps/frontend/.env*.local
 apps/frontend/next-env.d.ts
 apps/frontend/public/*
+apps/frontend/node_modules
 
 ## Ignore Backend
 apps/backend/.env
