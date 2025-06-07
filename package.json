@@ -1,17 +1,11 @@
 {
+  "name": "viddly",
   "private": true,
-  "packageManager": "bun@1.0.0",
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
-  "paths": {
-    "shared": "packages/shared"
-  },
+  "packageManager": "pnpm@10.11.1",
   "scripts": {
-    "dev:backend": "bun run --cwd apps/backend  dev",
-    "dev:frontend": "bun run --cwd apps/frontend dev",
-    "dev": "bun run dev:backend & bun run dev:frontend",
-    "build": "bun run --cwd apps/frontend build"
+    "dev:backend": "pnpm --filter backend dev",
+    "dev:frontend": "pnpm --filter frontend dev",
+    "dev": "pnpm -r --parallel dev",
+    "build": "pnpm -r build"
   }
 }

@@ -1,11 +1,10 @@
 {
-  "extends": "../../packages/tsconfig.json",
-  "baseUrl": ".",
   "compilerOptions": {
+    "composite": true,
     "baseUrl": ".",
     "paths": {
       "@/*": ["./*"],
-      "shared/*": ["../../packages/*"]
+      "@packages/*": ["../../packages/*"],
     },
     "jsx": "preserve"
   },

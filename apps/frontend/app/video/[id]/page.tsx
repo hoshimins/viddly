@@ -3,8 +3,8 @@
 import { Header } from '@/components/header'
 import { RelatedVideos } from '@/components/related-videos'
 import { VideoPlayer } from '@/components/video-player'
+import { VideoData } from '@packages/types/video'
 import { Suspense, useEffect, useState } from 'react'
-import { VideoData } from 'shared/types/video'
 
 const relatedVideos = [
   { id: '2', title: '都市の夜景', thumbnail: '/placeholder.svg?height=90&width=160' },
@@ -20,7 +20,7 @@ export default function VideoPage({ params }: { params: { id: string } }) {
   useEffect(() => {
     const fetchVideoData = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/videos/${params.id}`)
+        const response = await fetch(`http://localhost:3001/videos/${params.id}`)
         if(!response.ok) {
           throw new Error('Failed to fetch video data')
         }

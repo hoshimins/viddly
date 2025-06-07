@@ -1,4 +1,4 @@
-import type { UploadVideoData } from "shared/types/video";
+import type { UploadVideoData } from "@packages/types/video";
 import { uploadFilesWithUppy } from "./tus-upload";
 
 export const videoUpload = async (data: UploadVideoData): Promise<any> => {
@@ -18,7 +18,7 @@ export const videoUpload = async (data: UploadVideoData): Promise<any> => {
   try {
     // db に保存するメタデータを送信
     // const dbResponse = await fetch('http://localhost:3000/videos/upload')
-    const dbResponse = await fetch('http://localhost:3000/videos/upload', {
+    const dbResponse = await fetch('http://localhost:3001/videos/upload', {
       method: 'POST',
       body: metaData,
       headers: {

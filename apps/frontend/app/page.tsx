@@ -2,8 +2,8 @@
 
 import { Header } from '@/components/header'
 import { VideoGrid } from '@/components/video-grid'
+import { VideoData } from '@packages/types/video'
 import { Suspense, useEffect, useState } from 'react'
-import { VideoData } from 'shared/types/video'
 
 
 export default function Home() {
@@ -12,7 +12,7 @@ export default function Home() {
   useEffect(() => {
     const fetchVideoData = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/videos`, {
+        const response = await fetch(`http://localhost:3001/videos`, {
           method: 'GET',
           mode: 'cors',
           headers: {

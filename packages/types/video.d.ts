@@ -16,7 +16,7 @@ export type UploadVideoData = {
   title: string,
   description: string,
   actors: string,
-  thumbnailFile: File?,
+  thumbnailFile?: File,
 }
 
 export type UploadVideoMetaData = {
@@ -28,5 +28,5 @@ export type UploadVideoMetaData = {
 
 export type UploadVideoFileData = {
   videoFile: File,
-  thumbnailFile: File?,
+  thumbnailFile?: File,
 }

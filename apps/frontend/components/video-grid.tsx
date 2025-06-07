@@ -1,9 +1,9 @@
 'use client'
 
+import { VideoData } from '@packages/types/video'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import { VideoData } from 'shared/types/video'
 
 interface VideoGridProps {
   videos: VideoData[]

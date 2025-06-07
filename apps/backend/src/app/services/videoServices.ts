@@ -1,6 +1,5 @@
-import { UploadVideoMetaData } from "../../../../../packages/types/video";
-import db from '@infra/db';
-
+import prisma from '@/db';
+import { UploadVideoMetaData } from '@packages/types/video';
 
 export const videoService = {
   async getVideosAndThumbnails() {

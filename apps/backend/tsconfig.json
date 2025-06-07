@@ -1,9 +1,14 @@
+// apps/backend/tsconfig.json
 {
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
     "baseUrl": ".",
+    "composite": true,
     "paths": {
-      "@infra/*": ["../../../infra/*"],
-      "@/*": ["src/*"]
+      "@/*": ["./*"],
+      "@infra/*": ["../../infra/*"],
+      "@packages/*": ["../../packages/*"],
     }
-  }
+  },
+  "include": ["src", "../../infra", "db.ts"]
 }
