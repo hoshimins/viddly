@@ -1,0 +1,136 @@
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../../../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model users {
+  id           Int        @id @default(autoincrement())
+
+  name         String?    @default("unknown")
+  passwordHash String     @map("password_hash")
+
+  createdAt    DateTime   @default(now()) @map("created_at")
+  updatedAt    DateTime   @updatedAt @map("updated_at")
+
+  comments     comments[]
+  likes        likes[]
+  videos       videos[]
+
+  @@map("users")
+}
+
+model videos {
+  id                   Int             @id @default(autoincrement())
+
+  title                String          @db.VarChar(255)
+  description          String          @db.VarChar(500)
+  url                  String
+
+  createdAt            DateTime        @default(now()) @map("created_at")
+  updatedAt            DateTime        @updatedAt @map("updated_at")
+
+  thumbnailId          Int?
+  uploader             Int
+
+  comments             comments[]
+  likes                likes[]
+  videoTags            videoTags[]
+
+  // relatedVideos        relatedVideos[] @relation("VideoHasRelated")
+  // inverseRelatedVideos relatedVideos[] @relation("RelatedBelongsToVideo")
+
+  thumbnail            thumbnails?     @relation(fields: [thumbnailId], references: [id])
+  user                 users?          @relation(fields: [uploader], references: [id])
+
+  @@map("videos")
+}
+
+model thumbnails {
+  id        Int      @id @default(autoincrement())
+  url       String
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  video     videos[]
+
+  @@map("thumbnails")
+}
+
+model comments {
+  id        Int      @id @default(autoincrement())
+  videoId   Int
+  userId    Int
+
+  text      String   @db.VarChar(500)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  users     users    @relation(fields: [userId], references: [id])
+  videos    videos   @relation(fields: [videoId], references: [id])
+
+  @@map("comments")
+}
+
+model likes {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  videoId   Int
+
+  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  users     users    @relation(fields: [userId], references: [id])
+  videos    videos   @relation(fields: [videoId], references: [id])
+
+  @@unique([videoId, userId])
+  @@map("likes")
+}
+
+model tags {
+  id        Int         @id @default(autoincrement())
+
+  name      String      @db.VarChar(100)
+
+  createdAt DateTime    @default(now()) @map("created_at")
+  updatedAt DateTime    @updatedAt @map("updated_at")
+
+  videoTags videoTags[]
+
+  @@map("tags")
+}
+
+model videoTags {
+  id        Int      @id @default(autoincrement())
+  tagId     Int
+  videoId   Int
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  tag       tags     @relation(fields: [tagId], references: [id])
+  video     videos   @relation(fields: [videoId], references: [id])
+
+  @@map("video_tags")
+}
+
+// model relatedVideos {
+//   id        Int      @id @default(autoincrement())
+//   relatedId Int
+//   videoId   Int
+
+//   createdAt DateTime @default(now()) @map("created_at")
+//   updatedAt DateTime @updatedAt @map("updated_at")
+
+//   related   videos   @relation("VideoHasRelated", fields: [relatedId], references: [id])
+//   videos    videos   @relation("RelatedBelongsToVideo", fields: [videoId], references: [id])
+
+//   @@map("related_videos")
+// }
