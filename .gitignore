@@ -1,0 +1,16 @@
+## Ignore Visual Studio Code
+.vscode/*
+node_modules/*
+
+## Ignore apps/frontend/
+apps/frontend/.next/*
+apps/frontend/build/*
+apps/frontend/.vercel
+apps/frontend/.env*.local
+apps/frontend/next-env.d.ts
+apps/frontend/public/*
+apps/frontend/node_modules
+
+## Ignore Backend
+apps/backend/.env
+apps/backend/node_modules
