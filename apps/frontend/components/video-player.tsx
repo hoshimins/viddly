@@ -55,7 +55,7 @@ export function VideoPlayer({ src, title, addedDate, actors, description }: Vide
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden">
+    <div className="bg-card rounded-2xl card-shadow overflow-hidden">
       <div className="relative aspect-video">
         <video
           ref={videoRef}
@@ -63,25 +63,40 @@ export function VideoPlayer({ src, title, addedDate, actors, description }: Vide
           className="w-full h-full object-cover"
           onClick={togglePlay}
         />
-        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
+        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-3 sm:p-4">
           <div className="flex items-center justify-between text-white">
-            <Button variant="ghost" size="icon" onClick={togglePlay}>
-              {isPlaying ? <Pause className="h-6 w-6" /> : <Play className="h-6 w-6" />}
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              onClick={togglePlay} 
+              className="h-10 w-10 sm:h-12 sm:w-12 hover:bg-white/20 transition-colors"
+            >
+              {isPlaying ? <Pause className="h-5 w-5 sm:h-6 sm:w-6" /> : <Play className="h-5 w-5 sm:h-6 sm:w-6" />}
             </Button>
-            <div className="flex items-center space-x-2">
-              <Button variant="ghost" size="icon" onClick={toggleMute}>
-                {isMuted ? <VolumeX className="h-6 w-6" /> : <Volume2 className="h-6 w-6" />}
+            <div className="flex items-center space-x-2 sm:space-x-3">
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={toggleMute} 
+                className="h-8 w-8 sm:h-10 sm:w-10 hover:bg-white/20 transition-colors"
+              >
+                {isMuted ? <VolumeX className="h-4 w-4 sm:h-5 sm:w-5" /> : <Volume2 className="h-4 w-4 sm:h-5 sm:w-5" />}
               </Button>
               <Slider
-                className="w-24"
+                className="w-16 sm:w-24"
                 value={[volume * 100]}
                 min={0}
                 max={100}
                 step={1}
                 onValueChange={handleVolumeChange}
               />
-              <Button variant="ghost" size="icon" onClick={() => videoRef.current?.requestFullscreen()}>
-                <Maximize className="h-6 w-6" />
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={() => videoRef.current?.requestFullscreen()}
+                className="h-8 w-8 sm:h-10 sm:w-10 hover:bg-white/20 transition-colors"
+              >
+                <Maximize className="h-4 w-4 sm:h-5 sm:w-5" />
               </Button>
             </div>
           </div>

@@ -3,10 +3,34 @@
     "composite": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"],
-      "@packages/*": ["../../packages/*"],
+      "@/*": [
+        "./*"
+      ],
+      "@packages/*": [
+        "../../packages/*"
+      ]
     },
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "noEmit": true,
+    "incremental": true,
+    "module": "esnext",
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
   "include": [
     "next-env.d.ts",

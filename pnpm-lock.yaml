@@ -50,6 +50,12 @@ importers:
       '@radix-ui/react-slot':
         specifier: ^1.2.3
         version: 1.2.3(@types/react@18.3.23)(react@18.3.1)
+      '@uppy/core':
+        specifier: ^4.4.6
+        version: 4.4.6
+      '@uppy/xhr-upload':
+        specifier: ^4.3.3
+        version: 4.3.3(@uppy/core@4.4.6)
       biome:
         specifier: ^0.3.3
         version: 0.3.3
