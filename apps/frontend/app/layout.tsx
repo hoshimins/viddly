@@ -1,8 +1,9 @@
+import { ThemeProvider } from '@/contexts/theme-context'
 import '@/styles/globals.css'
 
 export const metadata = {
   title: 'Viddly',
-  description: 'A video streaming platform',
+  description: 'A modern video streaming platform',
 }
 
 export default function RootLayout({
@@ -12,8 +13,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ja" suppressHydrationWarning>
-      <body className="min-h-screen bg-background font-sans antialiased">
-        {children}
+      <body className="min-h-screen bg-background font-sans antialiased transition-colors duration-300">
+        <ThemeProvider>
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   )
