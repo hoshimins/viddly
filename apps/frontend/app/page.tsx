@@ -35,15 +35,35 @@ export default function Home() {
 
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-background">
       <Suspense fallback={<div>Loading...</div>}>
         <Header />
       </Suspense>
-      <main className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold text-gray-800 mb-6">動画一覧</h1>
-        <Suspense fallback={<div>Loading videos...</div>}>
-          <VideoGrid videos={videoData} />
-        </Suspense>
+      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        {/* Hero Section */}
+        <div className="text-center mb-12">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-4 animate-fade-in">
+            お気に入りの動画を
+            <span className="gradient-bg bg-clip-text text-transparent block sm:inline sm:ml-2">
+              発見しよう
+            </span>
+          </h1>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto animate-fade-in">
+            Viddlyで新しい動画体験を始めませんか？
+          </p>
+        </div>
+
+        {/* Videos Section */}
+        <div className="animate-fade-in">
+          <Suspense fallback={
+            <div className="text-center py-12">
+              <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+              <p className="text-muted-foreground mt-4">動画を読み込み中...</p>
+            </div>
+          }>
+            <VideoGrid videos={videoData} />
+          </Suspense>
+        </div>
       </main>
     </div>
   )
